@@ -6,8 +6,6 @@ import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IUser;
 
-import java.util.Arrays;
-
 public class CommandListener {
 
     private CommandManager manager;

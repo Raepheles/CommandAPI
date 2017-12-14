@@ -4,7 +4,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 
@@ -25,7 +24,8 @@ public class CommandManager {
 
     /**
      * Initalize Command API
-     * @param client IDiscordClient
+     *
+     * @param client        IDiscordClient
      * @param packagePrefix package string where commands are located
      */
     public CommandManager(IDiscordClient client, String packagePrefix) {
@@ -39,6 +39,17 @@ public class CommandManager {
 
         // Register our command listener
         getClient().getDispatcher().registerListener(new CommandListener(this));
+
+        // Register listener for help command
+        getClient().getDispatcher().registerListener(new HelpCommand(this));
+        try {
+            commands.add(new CustomCommand(this, HelpCommand.class.getMethod("helpCommand", CommandContext.class)));
+        } catch (NoSuchMethodException e) {
+            logger.error("Unable to register help command.");
+        }
+
+        // Sort all registered commands for the Help Module
+        commands.sort(new CommandComparator());
     }
 
     /**
@@ -79,5 +90,11 @@ public class CommandManager {
      */
     public void setCommandPrefix(IGuild guild, char commandPrefix) {
         commandPrefixes.put(guild.getLongID(), commandPrefix);
+    }
+
+    static class CommandComparator implements Comparator<CustomCommand> {
+        public int compare(CustomCommand c1, CustomCommand c2) {
+            return (c1.getModule() + " " + String.join(" ", c1.getCommands())).compareTo(c2.getModule() + " " + String.join(" ", c2.getCommands()));
+        }
     }
 }
