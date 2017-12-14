@@ -65,7 +65,7 @@ public class CommandManager {
      * @param guild
      * @return char command prefix for given guild
      */
-    protected char getCommandPrefix(IGuild guild) {
+    public char getCommandPrefix(IGuild guild) {
         if (guild == null)
             return DEFAULT_PREFIX;
         return commandPrefixes.getOrDefault(guild.getLongID(), DEFAULT_PREFIX);
@@ -77,7 +77,7 @@ public class CommandManager {
      * @param guild         Guild to change the prefix for
      * @param commandPrefix new prefix characters all commands must be prefaced with
      */
-    protected void setCommandPrefix(IGuild guild, char commandPrefix) {
+    public void setCommandPrefix(IGuild guild, char commandPrefix) {
         commandPrefixes.put(guild.getLongID(), commandPrefix);
     }
 }
