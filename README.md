@@ -20,4 +20,5 @@ This is the basic setup for a command. The method **must** be static and its onl
  - usage: This is how the command is used. There is no required format here, but this will be used by the `!Help` command to show users how to use the command.
  - module: This is used to group commands together in the `!Help` command.
  
- 
+## Dependency Management
+Check out [JitPack](https://jitpack.io/#DiscordBolt/CommandAPI) for instructions on how to incorporate this into your project.
