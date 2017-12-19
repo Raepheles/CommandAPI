@@ -20,6 +20,7 @@ public class HelpCommand {
     public static void helpCommand(CommandContext cc) {
 
         List<String> modules = manager.getCommands().stream().map(CustomCommand::getModule).distinct().collect(Collectors.toList());
+        String commandPrefix = manager.getCommandPrefix(cc.getGuild());
 
         if (cc.getArgCount() > 1) {
             String userRequestedModule = cc.combineArgs(1, cc.getArgCount() - 1);
@@ -29,8 +30,6 @@ public class HelpCommand {
                 return;
             }
         }
-
-        char commandPrefix = manager.getCommandPrefix(cc.getGuild());
 
         boolean send = false;
         EmbedBuilder embed = new EmbedBuilder();
