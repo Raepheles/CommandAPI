@@ -95,6 +95,12 @@ public class CommandContext {
         }).get();
     }
 
+    public IMessage replyWith(String message, EmbedObject embedObject) {
+        return RequestBuffer.request( () -> {
+            return getChannel().sendMessage(message, embedObject);
+        }).get();
+    }
+
     public void sendUsage() {
         replyWith(customCommand.getUsage(getGuild()));
     }
