@@ -35,7 +35,7 @@ public class HelpCommand {
         StringBuilder sb = new StringBuilder("```\n");
 
         for (String module : modules) {
-            sb.append(String.format("%s | For module commands use: %shelp %s\n", module, manager.getCommandPrefix(cc.getGuild()), module);
+            sb.append(String.format("%s | For module commands use: %shelp %s\n", module, manager.getCommandPrefix(cc.getGuild()), module));
         }
         sb.append("```");
         cc.replyWith(sb.toString());   
