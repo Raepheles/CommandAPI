@@ -18,7 +18,7 @@ public class HelpCommand {
 
     @BotCommand(command = "help", aliases = "h", module = "Help Module", secret = true, description = "View all available commands.", usage = "Help [Module]")
     public static void helpCommand(CommandContext cc) {
-
+        
         List<String> modules = manager.getCommands().stream().map(CustomCommand::getModule).distinct().collect(Collectors.toList());
         String commandPrefix = manager.getCommandPrefix(cc.getGuild());
 
@@ -32,39 +32,13 @@ public class HelpCommand {
         }
 
         boolean send = false;
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.withColor(36, 153, 153);
+        StringBuilder sb = new StringBuilder("```\n");
 
-        StringBuilder sb = new StringBuilder();
         for (String module : modules) {
-            sb.setLength(0);
-
-            for (CustomCommand command : manager.getCommands().stream().filter(c -> c.getModule().equals(module)).collect(Collectors.toList())) {
-                // Check if the user has permission for the command.
-                if (!cc.getAuthor().getPermissionsForGuild(cc.getGuild()).containsAll(command.getPermissions()))
-                    continue;
-                if (command.isSecret())
-                    continue;
-
-                sb.append('`').append(commandPrefix).append(String.join(" ", command.getCommands())).append("` | ").append(command.getDescription()).append('\n');
-            }
-            if (sb.length() > 1024)
-                sb.setLength(1024);
-
-            if (embed.getTotalVisibleCharacters() + sb.length() + module.length() >= 6000)
-                continue;
-
-            if (module.length() == 0 || sb.length() == 0) {
-                continue;
-            }
-
-            send = true;
-            embed.appendField(module, sb.toString(), false);
+            sb.append(String.format("%s | For module commands use: %shelp %s\n", module, manager.getCommandPrefix(cc.getGuild()), module);
         }
-        if (send)
-            cc.replyWith(embed.build());
-        else
-            cc.replyWith("No available commands.");
+        sb.append("```");
+        cc.replyWith(sb.toString());   
     }
 
     @EventSubscriber
