@@ -18,27 +18,29 @@ public class HelpCommand {
 
     @BotCommand(command = "help", aliases = "h", module = "Help Module", secret = true, description = "View all available commands.", usage = "Help [Module]")
     public static void helpCommand(CommandContext cc) {
-        
         List<String> modules = manager.getCommands().stream().map(CustomCommand::getModule).distinct().collect(Collectors.toList());
         String commandPrefix = manager.getCommandPrefix(cc.getGuild());
 
         if (cc.getArgCount() > 1) {
             String userRequestedModule = cc.combineArgs(1, cc.getArgCount() - 1);
-            modules = modules.stream().filter(s -> s.equalsIgnoreCase(userRequestedModule)).collect(Collectors.toList());
-            if (modules.size() < 1) {
-                cc.replyWith("No modules found matching \"" + userRequestedModule + "\".");
-                return;
+            List<String> commands = manager.getCommands().stream().filter(c -> c.getModule().equalsIgnoreCase(userRequestedModule)).map(cmd -> String.join(" ", cmd.getCommands())).collect(Collectors.toList());
+            List<String> commandDescs = manager.getCommands().stream().filter(c -> c.getModule().equalsIgnoreCase(userRequestedModule)).map(CustomCommand::getDescription).collect(Collectors.toList());
+            StringBuilder sb = new StringBuilder(String.format("Commands for module: %s\n```\n", userRequestedModule));
+            for(String command: commands) {
+                sb.append(String.format("%20s | %s\n", String.format("%s%s", commandPrefix, command), commandDescs.get(commands.indexOf(command))));
             }
+            cc.replyWith(sb.toString());
+            return;
         }
 
         boolean send = false;
         StringBuilder sb = new StringBuilder("```\n");
 
         for (String module : modules) {
-            sb.append(String.format("%s | For module commands use: %shelp %s\n", module, manager.getCommandPrefix(cc.getGuild()), module));
+            sb.append(String.format("%s | For module commands use: %shelp %s\n", module, commandPrefix, module));
         }
         sb.append("```");
-        cc.replyWith(sb.toString());   
+        cc.replyWith(sb.toString());
     }
 
     @EventSubscriber
