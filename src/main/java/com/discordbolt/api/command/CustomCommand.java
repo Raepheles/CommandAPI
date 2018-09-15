@@ -170,7 +170,7 @@ public class CustomCommand {
             if (ite.getCause() instanceof CommandException) {
                 cc.replyWith(ite.getCause().getMessage());
             } else {
-                logger.error("Uncaught exception during execution of \"" + manager.getCommandPrefix(cc.getGuild()) + String.join(" ", getCommands()) + "\" command. Full message: \"" + message.getContent() + "\".);
+                logger.error("Uncaught exception during execution of \"" + manager.getCommandPrefix(cc.getGuild()) + String.join(" ", getCommands()) + "\" command. Full message: \"" + message.getContent() + "\".");
                 logger.error(ite.getCause().getMessage());
                 logger.debug(ite.getCause().getMessage(), ite.getCause());
                 cc.replyWith(ExceptionMessage.COMMAND_PROCESS_EXCEPTION);
